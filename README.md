@@ -69,7 +69,9 @@ This repository contains an executable program, which is a demo version of our m
 
 ### Data
 
-Some test data can be found [here](./data).
+ - Some test data can be found [here](./data).
+ - You can  create 2D polygonal shape by  pressing "M", which activates manually editing mode.
+In this mode, you can create the polygonal shape by adding the vertices one by one.
 
 
 ---
