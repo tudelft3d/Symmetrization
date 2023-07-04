@@ -11,8 +11,8 @@ int main(int argc, char** argv)
 {
 
 	std::string file = "butterfly";
-	const std::string file_name =  "../../../data/" + file + ".obj";
-	easy3d::SymmetryViewer viewer;
+	const std::string file_name =  "../../data/" + file + ".obj";
+	SymmetryViewer viewer;
 	auto model = viewer.Viewer::add_model(file_name, true);
 	if (!model)
 	{
