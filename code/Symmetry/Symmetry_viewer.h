@@ -83,10 +83,6 @@ namespace easy3d {
         // We don't need a per-window font. So this function is static
         void reload_font(int font_size = 16);
 
-        // To provide real-time feedback to the user, e.g., current state of the
-        // model and viewer, etc. This is implemented as a simple static window
-        // with no decoration + a context-menu to choose its position.
-        void draw_overlay(bool *visible);
 
     protected:
         bool key_press_event(int key, int modifiers) override;

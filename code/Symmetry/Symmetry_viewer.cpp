@@ -109,9 +109,6 @@ namespace easy3d {
 
     void SymmetryViewer::post_draw()
     {
-        static bool show_overlay = true;
-        if (show_overlay)
-            draw_overlay(&show_overlay);
 
         ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(5, 8));
         if (ImGui::BeginMainMenuBar())
@@ -225,32 +222,11 @@ namespace easy3d {
     }
 
 
-    void SymmetryViewer::draw_overlay(bool *visible)
-    {
-        ImGui::SetNextWindowSize(ImVec2(420 * widget_scaling(), 90 * widget_scaling()), ImGuiCond_FirstUseEver);
-        const float distance = 10.0f;
-        static int corner = 1;
-        ImVec2 window_pos = ImVec2(ImGui::GetIO().DisplaySize.x - 600, distance + 30);
-        ImVec2 window_pos_pivot = ImVec2((corner & 1) ? 1.0f : 0.0f, (corner & 2) ? 1.0f : 0.0f);
-        if (corner != -1)
-            ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
-        ImGui::SetNextWindowBgAlpha(alpha_); // Transparent background
-        if (ImGui::Begin("Easy3D: Information", visible,
-                         (corner != -1 ? ImGuiWindowFlags_NoMove : 0) | ImGuiWindowFlags_NoTitleBar |
-                         ImGuiWindowFlags_NoResize/* | ImGuiWindowFlags_AlwaysAutoResize*/ |
-                         ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing |
-                         ImGuiWindowFlags_NoNav))
-        {
-            ImGui::Text("Drag the existing model to the program or  \n"
-                        "Manually create the 2D polygonal model");
-            ImGui::Separator();
-            ImGui::Text("Press 'R' to symmetrize the shape or \n"
-                        "Press 'H' to add horizontal and vertical constants to the shape");
-            ImGui::Separator();
-
-        }
-        ImGui::End();
-    }
+//    ImGui::Text("Drag the existing model to the program or  \n"
+//    "Manually create the 2D polygonal model");
+//    ImGui::Separator();
+//    ImGui::Text("Press 'R' to symmetrize the shape or \n"
+//    "Press 'H' to add horizontal and vertical constants to the shape");
 
 // convert the mesh into triangular mesh using the tessellator
     void triangulate(SurfaceMesh *mesh)
