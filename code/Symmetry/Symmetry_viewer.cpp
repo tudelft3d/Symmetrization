@@ -70,7 +70,7 @@ SymmetryViewer::SymmetryViewer(
         int stencil_bits /* = 8 */
 )
         : Viewer(title, samples, gl_major, gl_minor, full_screen, resizable, depth_bits, stencil_bits),
-          alpha_(0.8f), movable_(true), texter_(nullptr), font_size_delta_(0.0f), line_spacing_(0.0f),
+           texter_(nullptr), font_size_delta_(0.0f), line_spacing_(0.0f),
           alignment_(TextRenderer::ALIGN_LEFT), upper_left_(true)
 {
     camera()->setUpVector(vec3(0, 1, 0));
@@ -137,7 +137,6 @@ void SymmetryViewer::post_draw()
 
         draw_menu_view();
 
-        menu_height_ = ImGui::GetWindowHeight();
         ImGui::EndMainMenuBar();
     }
     ImGui::PopStyleVar();
@@ -372,10 +371,10 @@ bool SymmetryViewer::mouse_release_event(int x, int y, int button, int modifiers
         if (real_time_polygon_.size() > 2)
         {
             polygon_ = real_time_polygon_;
-            return true;
         }
 
     }
+
 }
 
 bool SymmetryViewer::mouse_press_event(int x, int y, int button, int modifiers)
@@ -387,9 +386,8 @@ bool SymmetryViewer::mouse_press_event(int x, int y, int button, int modifiers)
         float y = ImGui::GetIO().MousePos.y;
         polygon_.push_back(vec2(x, y));
         return true;
-    } else if (pickable_ && button == GLFW_MOUSE_BUTTON_RIGHT)
+    } else if ( button == GLFW_MOUSE_BUTTON_RIGHT)
     {
-        pickable_ = false;
         SurfaceMesh *new_mesh = new SurfaceMesh();
         SurfaceMeshBuilder builder(new_mesh);
         std::vector<SurfaceMesh::Vertex> vts;
@@ -419,19 +417,15 @@ bool SymmetryViewer::mouse_press_event(int x, int y, int button, int modifiers)
 
 }
 
-bool SymmetryViewer::mouse_drag_event(int x, int y, int dx, int dy, int button, int modifiers)
+bool SymmetryViewer::mouse_free_move_event(int x, int y, int dx, int dy, int modifiers)
 {
     if (pickable_)
     {
-
         real_time_polygon_ = polygon_;
-//            if (button == GLFW_MOUSE_BUTTON_LEFT)
-        {
-            real_time_polygon_.push_back(vec2(x, y));
-        }
+        real_time_polygon_.push_back(vec2(x, y));
         return false;
     } else
-        return Viewer::mouse_drag_event(x, y, dx, dy, button, modifiers);
+        return Viewer::mouse_free_move_event(x, y, dx, dy, modifiers);
 }
 
 bool SymmetryViewer::key_press_event(int key, int modifiers)
@@ -718,9 +712,9 @@ bool SymmetryViewer::key_press_event(int key, int modifiers)
         // Also show the standard "edges"
         mesh->renderer()->get_lines_drawable("edges")->set_visible(true);
         return false;
-    } else if (key == GLFW_KEY_M)
+    } else if (key == GLFW_KEY_LEFT_CONTROL)
     {
-        pickable_ = !pickable_;
+        pickable_ = true;
         std::cout << "you can start to left-pick on the paint canvas to select the points,\n"
                      "right click the mouse when it is finished" << std::endl;
     } else if (key == GLFW_KEY_T)
@@ -758,5 +752,14 @@ bool SymmetryViewer::key_press_event(int key, int modifiers)
         mesh->renderer()->update();
     } else
         return Viewer::key_press_event(key, modifiers);
+}
+bool SymmetryViewer::key_release_event(int key, int modifiers)
+{
+    if (key==GLFW_KEY_LEFT_CONTROL)
+    {
+        pickable_ = false;
+    }
+    else
+        return Viewer::key_release_event(key, modifiers);
 }
 

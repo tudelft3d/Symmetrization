@@ -67,7 +67,7 @@ protected:
 
     bool mouse_press_event(int x, int y, int button, int modifiers) override;
 
-    bool mouse_drag_event(int x, int y, int dx, int dy, int button, int modifiers) override;
+    bool mouse_free_move_event(int x, int y, int dx, int dy, int modifiers) override;
 
     bool mouse_release_event(int x, int y, int button, int modifiers) override;
 
@@ -89,6 +89,7 @@ protected:
 
 protected:
     bool key_press_event(int key, int modifiers) override;
+    bool key_release_event(int key, int modifiers) override;
 
     std::string usage() const override;
 
@@ -96,12 +97,8 @@ protected:
     // Single global context by default, but can be overridden by the user
     static ImGuiContext *context_;
 
-    // Global variables for all the windows
-    float alpha_;
-    bool movable_;
     bool pickable_ = false;
 
-    float menu_height_;
     easy3d::Polygon2 polygon_, real_time_polygon_;
 
 public:
