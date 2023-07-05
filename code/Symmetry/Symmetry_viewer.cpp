@@ -399,10 +399,8 @@ bool SymmetryViewer::mouse_press_event(int x, int y, int button, int modifiers)
         for (auto p: polygon_)
         {
             auto x0 = p.x;
-            auto y0 = p.y;
-            x0 = x0 / float(win_width);
-            y0 = 1.0f - y0 / float(win_height);
-            auto v = new_mesh->add_vertex(vec3(40 * x0, 40 * y0, 0));
+            auto y0 = win_height - p.y - 1.0;
+            auto v = new_mesh->add_vertex(vec3( x0, y0, 0));
             vts.push_back(v);
         }
         //add faces
