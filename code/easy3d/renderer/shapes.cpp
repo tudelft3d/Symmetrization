@@ -457,12 +457,11 @@ namespace easy3d {
 
 
         void draw_polygon_wire(const Polygon2 &polygon, const vec4 &color, int width, int height, float depth) {
-            if (polygon.size() < 3)
-                return;
 
             const std::string name = "screen_space/screen_space_color";
             auto program = ShaderManager::get_program(name);
-            if (!program) {
+            if (!program)
+            {
                 std::vector<ShaderProgram::Attribute> attributes = {
                         ShaderProgram::Attribute(ShaderProgram::POSITION, "ndc_position")
                 };
@@ -472,28 +471,59 @@ namespace easy3d {
                 return;
 
             std::vector<vec2> points(polygon.size());
-            for (std::size_t i = 0; i < polygon.size(); ++i) {
-                const auto &p = polygon[i];
+            for (std::size_t i = 0; i < polygon.size(); ++i)
+            {
+                const auto& p = polygon[i];
                 // to use the screen space shaders, I need to convert the point coordinates into the NDC space.
                 // also have to follow the OpenGL coordinates rule.
-                points[i].x = {2.0f * p.x / width - 1.0f};
-                points[i].y = {2.0f * (height - p.y - 1) / height - 1.0f};
+                points[i].x = { 2.0f * p.x / width - 1.0f };
+                points[i].y = { 2.0f * (height - p.y - 1) / height - 1.0f };
+            }
+            if (polygon.size() == 2)
+            {
+                unsigned int vertex_buffer = 0;
+                VertexArrayObject vao; easy3d_debug_log_gl_error;
+                vao.create_array_buffer(vertex_buffer,
+                                        ShaderProgram::POSITION,
+                                        points.data(),
+                                        points.size() * sizeof(vec2),
+                                        2,
+                                        true); easy3d_debug_log_gl_error;
+
+                program->bind();    easy3d_debug_log_gl_error;
+                program->set_uniform("screen_color", color); easy3d_debug_log_gl_error;
+                program->set_uniform("depth", depth);
+                vao.bind(); easy3d_debug_log_gl_error;
+                glDrawArrays(GL_LINES, 0, 2);     easy3d_debug_log_gl_error;
+                vao.release();  easy3d_debug_log_gl_error;
+                program->release();     easy3d_debug_log_gl_error;
+
+                VertexArrayObject::release_buffer(vertex_buffer);
+
+            }
+            else
+            {
+                unsigned int vertex_buffer = 0;
+                VertexArrayObject vao; easy3d_debug_log_gl_error;
+                vao.create_array_buffer(vertex_buffer,
+                                        ShaderProgram::POSITION,
+                                        points.data(),
+                                        points.size() * sizeof(vec2),
+                                        2,
+                                        true); easy3d_debug_log_gl_error;
+
+                program->bind();    easy3d_debug_log_gl_error;
+                program->set_uniform("screen_color", color); easy3d_debug_log_gl_error;
+                program->set_uniform("depth", depth);
+                vao.bind(); easy3d_debug_log_gl_error;
+                glDrawArrays(GL_LINE_LOOP, 0, points.size());     easy3d_debug_log_gl_error;
+                vao.release();  easy3d_debug_log_gl_error;
+                program->release();     easy3d_debug_log_gl_error;
+
+                VertexArrayObject::release_buffer(vertex_buffer);
+
             }
 
-            unsigned int vertex_buffer = 0;
-            VertexArrayObject vao; easy3d_debug_log_gl_error;
-            vao.create_array_buffer(vertex_buffer, ShaderProgram::POSITION, points.data(), points.size() * sizeof(vec2),
-                                    2, true); easy3d_debug_log_gl_error;
-
-            program->bind();    easy3d_debug_log_gl_error;
-            program->set_uniform("screen_color", color); easy3d_debug_log_gl_error;
-            program->set_uniform("depth", depth);
-            vao.bind(); easy3d_debug_log_gl_error;
-            glDrawArrays(GL_LINE_LOOP, 0, points.size());     easy3d_debug_log_gl_error;
-            vao.release();  easy3d_debug_log_gl_error;
-            program->release();     easy3d_debug_log_gl_error;
-
-            VertexArrayObject::release_buffer(vertex_buffer);
         }
 
 

@@ -142,19 +142,22 @@ void SymmetryViewer::post_draw()
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-    if (polygon_.size() >= 3)
+    if (polygon_.size() >= 2)
     {
         // draw the boundary of the rect/lasso
 
         shapes::draw_polygon_wire(polygon_, vec4(1.0f, 0.0f, 0.0f, 1.0f), width(), height(), -1.0f);
-        shapes::draw_polygon_wire(real_time_polygon_, vec4(.0f, 1.0f, 0.0f, 1.0f), width(), height(), -1.0f);
-        // draw its transparent face
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        shapes::draw_polygon_filled(polygon_, vec4(1.0f, 0.0f, 0.0f, 0.2f), width(), height(), -0.9f);
-        glDisable(GL_BLEND);
-
+        if (polygon_.size() >= 3)
+        {
+            // draw its transparent face
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            shapes::draw_polygon_filled(polygon_, vec4(1.0f, 0.0f, 0.0f, 0.2f), width(), height(), -0.9f);
+            glDisable(GL_BLEND);
+        }
     }
+    if (real_time_polygon_.size()>=2)
+        shapes::draw_polygon_wire(real_time_polygon_, vec4(0.0f, 1.0f, 0.0f, 1.0f), width(), height(), -1.0f);
 
 }
 
@@ -366,7 +369,7 @@ bool SymmetryViewer::mouse_release_event(int x, int y, int button, int modifiers
 {
     if ((pickable_) && button == GLFW_MOUSE_BUTTON_LEFT)
     {
-        if (real_time_polygon_.size() > 2)
+        if (real_time_polygon_.size() >= 2)
         {
             polygon_ = real_time_polygon_;
         }
