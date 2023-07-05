@@ -10,7 +10,7 @@
 int main(int argc, char** argv)
 {
 
-	std::string file = "butterfly";
+	std::string file = "tower";
 	const std::string file_name =  "../../data/" + file + ".obj";
 	SymmetryViewer viewer;
 	auto model = viewer.Viewer::add_model(file_name, true);

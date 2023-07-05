@@ -90,6 +90,7 @@ protected:
 protected:
     bool key_press_event(int key, int modifiers) override;
     bool key_release_event(int key, int modifiers) override;
+    bool mouse_drag_event(int x, int y, int dx, int dy, int button, int modifiers) override;
 
     std::string usage() const override;
 

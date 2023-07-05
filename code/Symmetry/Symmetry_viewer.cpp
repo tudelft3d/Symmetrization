@@ -115,19 +115,17 @@ void SymmetryViewer::post_draw()
 
     const float font_size = 28.0f + font_size_delta_;
     float x = 20.0f;
-    float y = 30.0f;
+    float y = 40.0f;
 
     const auto num_fonts = texter_->num_fonts();
     const float font_height = texter_->font_height(font_size);
 
     texter_->draw(
-            "Drag an existing model to the program  \n"
-            "Manually create a 2D polygonal model \n"
+            "Drop a file to the program to open a model, or\n"
+            "manually create a model by Ctrl + clicking.  \n"
             "----------------------------------------------------- \n"
-            "Press 'R' to symmetrize the shape  \n"
-            "Press 'H' to add horizontal and vertical constraints \n"
-            "and symmetrize  the shape",
-            x * dpi_scaling(), y * dpi_scaling(), 24, TextRenderer::Align(alignment_), 0, vec3(0, 0, 0),
+            "Press 'R' to symmetrize the model.",
+            x * dpi_scaling(), y * dpi_scaling(), 20, TextRenderer::Align(alignment_), 0, vec3(0, 0, 0),
             line_spacing_, upper_left_);
 
     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(5, 8));
@@ -763,3 +761,10 @@ bool SymmetryViewer::key_release_event(int key, int modifiers)
         return Viewer::key_release_event(key, modifiers);
 }
 
+
+bool SymmetryViewer::mouse_drag_event(int x, int y, int dx, int dy, int button, int modifiers) {
+    if (button == GLFW_MOUSE_BUTTON_LEFT)
+        return false;
+    else
+        return Viewer::mouse_drag_event(x, y, dx, dy, button, modifiers);
+}
