@@ -9,4 +9,4 @@ add_executable(${PROJECT_NAME}
         main.cpp)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Symmetrization")
-target_link_libraries(${PROJECT_NAME}  easy3d_fileio   easy3d::viewer easy3d::core easy3d::renderer  easy3d::util method 3rd_imgui)
+target_link_libraries(${PROJECT_NAME}  easy3d::fileio   easy3d::viewer easy3d::core easy3d::renderer  easy3d::util method 3rd_imgui)
